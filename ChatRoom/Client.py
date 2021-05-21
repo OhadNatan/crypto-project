@@ -31,7 +31,7 @@ bufferSize = 1024
 UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 while True:
     # Send to server using created UDP socket
-    msgFromClient = input("Enter MSG:")
+    msgFromClient = input("Enter MSG:\n")
     if msgFromClient == "EXIT":
         bytesToSend = str.encode("I'm out, BYE!")
         UDPClientSocket.sendto(bytesToSend, serverAddressPort)

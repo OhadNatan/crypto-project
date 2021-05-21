@@ -54,4 +54,7 @@ while (True):
     print(clientIP)
 
     # Sending a reply to client
+    msgFromServer = input("Enter MSG:\n")
+    bytesToSend = str.encode(str(msgFromServer))
     UDPServerSocket.sendto(bytesToSend, address)
+    
