@@ -1,5 +1,6 @@
 import socket
 import argparse
+import os
 
 # Create the parser
 parser = argparse.ArgumentParser(description='create sever by IP and PORT given')
@@ -29,6 +30,16 @@ bufferSize = 1024
 # Create a UDP socket at client side
 
 UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+
+pid = os.fork()
+
+if pid:
+    # parent
+    while True:
+        msgFromServer = UDPClientSocket.recvfrom(bufferSize)
+        msg = "Message from Server {}".format(msgFromServer[0])
+        print(msg)
+
 while True:
     # Send to server using created UDP socket
     msgFromClient = input("Enter MSG:\n")
@@ -39,9 +50,3 @@ while True:
         break
     bytesToSend = str.encode(str(msgFromClient))
     UDPClientSocket.sendto(bytesToSend, serverAddressPort)
-
-    msgFromServer = UDPClientSocket.recvfrom(bufferSize)
-
-    msg = "Message from Server {}".format(msgFromServer[0])
-
-    print(msg)

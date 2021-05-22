@@ -1,5 +1,8 @@
 import socket
 import argparse
+import os
+
+one_fork = 0
 
 # Create the parser
 parser = argparse.ArgumentParser(description='create sever by IP and PORT given')
@@ -40,7 +43,7 @@ print("UDP server up and listening")
 
 # Listen for incoming datagrams
 
-while (True):
+while True:
     bytesAddressPair = UDPServerSocket.recvfrom(bufferSize)
 
     message = bytesAddressPair[0]
@@ -53,8 +56,12 @@ while (True):
     print(clientMsg)
     print(clientIP)
 
-    # Sending a reply to client
-    msgFromServer = input("Enter MSG:\n")
-    bytesToSend = str.encode(str(msgFromServer))
-    UDPServerSocket.sendto(bytesToSend, address)
-    
+    if one_fork == 0:
+        one_fork = 1
+        pid = os.fork()
+        if pid:
+            while True:
+                # Sending a reply to client
+                msgFromServer = input("Enter MSG:\n")
+                bytesToSend = str.encode(str(msgFromServer))
+                UDPServerSocket.sendto(bytesToSend, address)
