@@ -60,15 +60,15 @@ def receive():
         print("Connected with {add}!".format(add=str(address)))
 
         client.send("NICK".encode('utf-8'))
-        nickname = client.recv(buffer_size)
+        nickname = client.recv(buffer_size).decode('utf-8')
         nicknames.append(nickname)
         clients.append(client)
-        nick = str(nickname).encode('utf-8')
+        nick = str(nickname)
         message_to_print = "The client's nickname is {nick}".format(nick=nick)
         print(message_to_print)
         message_to_broadcast = "{nick} connected to the server\n".format(nick=nick)
         broadcast(message_to_broadcast.encode('utf-8'))
-        client.send("Connected to the server".encode('utf-8'))
+        client.send("Connected to the server\n".encode('utf-8'))
 
         thread = threading.Thread(target=handle, args=(client,))
         thread.start()
