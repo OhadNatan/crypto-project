@@ -6,7 +6,7 @@ from tkinter import simpledialog
 
 HOST = '10.0.0.17'
 PORT = 9090
-
+buffer_size = 1024
 
 class Client:
 
@@ -58,7 +58,7 @@ class Client:
     def receive(self):
         while self.running:
             try:
-                message = self.sock.recv(1024).decode('utf-8')
+                message = self.sock.recv(buffer_size).decode('utf-8')
                 if message == 'NICK':
                     self.sock.send(self.nickname.encode('utf-8'))
                 else:
