@@ -7,6 +7,7 @@ from tkinter import simpledialog
 HOST = '10.0.0.17'
 PORT = 9090
 
+
 class Client:
 
     def __init__(self, host, port):
@@ -31,13 +32,13 @@ class Client:
         self.win=tkinter.Tk()
         self.win.configure(bg="lightgray")
 
-        self.chat_label = tkinter.Label(self.win,text = "Chat:",bg="lightgray")
-        self.chat_label.config(font= ("Arial",12))
-        self.chat_label.pack(padx=20,pady =5)
+        self.chat_label = tkinter.Label(self.win, text = "Chat:", bg="lightgray")
+        self.chat_label.config(font= ("Arial", 12))
+        self.chat_label.pack(padx=20, pady =5)
 
         self.text_area = tkinter.scrolledtext.ScrolledText(self.win)
         self.text_area.pack(padx=20,pady=5)
-        self.text_area.config(state = 'disabled')
+        self.text_area.config(state='disabled')
 
         self.msg_label = tkinter.Label(self.win, text="Massage:", bg="lightgray")
         self.msg_label.config(font=("Arial", 12))
@@ -51,13 +52,13 @@ class Client:
         self.send_button.pack(padx=20, pady=5)
 
         self.gui_done = True
-        self.win.protocol("WM_DELETE_WINDOW",self.stop)
+        self.win.protocol("WM_DELETE_WINDOW", self.stop)
         self.win.mainloop()
 
     def receive(self):
         while self.running:
             try:
-                message = self.sock.recv(1024)
+                message = self.sock.recv(1024).encode('utf-8')
                 if message == 'NICK':
                     self.sock.send(self.nickname.encode('utf-8'))
                 else:
@@ -68,6 +69,7 @@ class Client:
                         self.text_area.config(state='disabled')
             except ConnectionAbortedError:
                 break
+
             except:
                 print("Error")
                 self.sock.close()

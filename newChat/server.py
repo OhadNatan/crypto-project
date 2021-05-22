@@ -63,9 +63,10 @@ def receive():
         nickname = client.recv(buffer_size)
         nicknames.append(nickname)
         clients.append(client)
-        message_to_print = "The client's nickname is {nick}".format(nick=str(nickname))
+        nick = str(nickname).encode('utf-8')
+        message_to_print = "The client's nickname is {nick}".format(nick=nick)
         print(message_to_print)
-        message_to_broadcast = "{nick} connected to the server\n".format(nick=str(nickname))
+        message_to_broadcast = "{nick} connected to the server\n".format(nick=nick)
         broadcast(message_to_broadcast.encode('utf-8'))
         client.send("Connected to the server".encode('utf-8'))
 
