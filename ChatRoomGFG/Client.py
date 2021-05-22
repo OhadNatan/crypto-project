@@ -4,12 +4,14 @@ import select
 import sys
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-if len(sys.argv) != 3:
-	print ("Correct usage: script, IP address, port number")
-	exit()
-IP_address = str(sys.argv[1])
-Port = int(sys.argv[2])
-server.connect((IP_address, Port))
+# if len(sys.argv) != 3:
+# 	print ("Correct usage: script, IP address, port number")
+# 	exit()
+# IP_address = str(sys.argv[1])
+# Port = int(sys.argv[2])
+# server.connect((IP_address, Port))
+
+server.connect(("10.0.0.23", 2001))
 
 while True:
 
@@ -24,7 +26,7 @@ while True:
 	to send a message, then the if condition will hold true
 	below.If the user wants to send a message, the else
 	condition will evaluate as true"""
-	read_sockets,write_socket, error_socket = select.select(sockets_list,[],[])
+	read_sockets,write_socket, error_socket = select.select(sockets_list, [], [])
 
 	for socks in read_sockets:
 		if socks == server:

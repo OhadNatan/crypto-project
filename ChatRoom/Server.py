@@ -8,7 +8,7 @@ parser = argparse.ArgumentParser(description='create sever by IP and PORT given'
 parser.add_argument('-IP',
                        type=str,
                        help='the host IP',
-                       default="0.0.0.0")
+                       default="10.0.0.23")
 
 parser.add_argument('-PORT',
                        type=int,
