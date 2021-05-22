@@ -20,7 +20,7 @@ def broadcast(message):
 
     Parameters
     ----------
-    message : str
+    message : bytes
         The message to broadcast to all clients
     """
     for client in clients:
