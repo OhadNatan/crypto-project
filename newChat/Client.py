@@ -4,7 +4,7 @@ import tkinter
 import tkinter.scrolledtext
 from tkinter import simpledialog
 
-HOST = '10.0.0.17'
+HOST = '10.0.0.25'
 PORT = 9090
 buffer_size = 1024
 
@@ -32,7 +32,7 @@ class Client:
         self.win=tkinter.Tk()
         self.win.configure(bg="lightgray")
 
-        self.chat_label = tkinter.Label(self.win, text = "Chat:", bg="lightgray")
+        self.chat_label = tkinter.Label(self.win, text = "Chat:", bg="green")
         self.chat_label.config(font= ("Arial", 12))
         self.chat_label.pack(padx=20, pady =5)
 
@@ -40,7 +40,7 @@ class Client:
         self.text_area.pack(padx=20,pady=5)
         self.text_area.config(state='disabled')
 
-        self.msg_label = tkinter.Label(self.win, text="Massage:", bg="lightgray")
+        self.msg_label = tkinter.Label(self.win, text="Massage:", bg="blue")
         self.msg_label.config(font=("Arial", 12))
         self.msg_label.pack(padx=20, pady=5)
 

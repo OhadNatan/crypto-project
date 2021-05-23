@@ -2,7 +2,7 @@ import socket
 import threading
 
 # Global Vars
-HOST = '10.0.0.17'
+HOST = '10.0.0.25'
 PORT = 9090
 buffer_size = 1024
 clients = []
