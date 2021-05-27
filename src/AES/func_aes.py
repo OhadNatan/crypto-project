@@ -16,12 +16,6 @@ def break_in_grids_of_16(s):
     return all
 
 
-# const matrix for mix columns
-matrix_to_mul = np.array([[2, 3, 1, 1],
-                          [1, 2, 3, 1],
-                          [1, 1, 2, 3],
-                          [3, 1, 1, 2]])
-
 # normal form of s box`s
 s_box = (
     0x63, 0x7C, 0x77, 0x7B, 0xF2, 0x6B, 0x6F, 0xC5, 0x30, 0x01, 0x67, 0x2B, 0xFE, 0xD7, 0xAB, 0x76,
@@ -103,10 +97,20 @@ def set_column(matrix, column, index):
         matrix[i][index] = column[i]
 
 
+def mix_column(column):
+    mixed_column = [
+        (0x02 * column[0]) ^ (0x03 * column[1]) ^ column[2] ^ column[3],
+        column[0] ^ (0x02 * column[1]) ^ (0x03 * column[2]) ^ column[3],
+        column[0] ^ column[1] ^ (0x02 * column[2]) ^ (0x03 * column[3]),
+        (0x03 * column[0]) ^ column[1] ^ column[2] ^ (0x02 * column[3])
+    ]
+    return mixed_column
+
+
 def mix_columns(block):
     for i in range(4):
         column = get_column(block, i)
-        column = np.matmul(matrix_to_mul, column)
+        column = mix_column(column)
         set_column(block, column, i)
 
 
