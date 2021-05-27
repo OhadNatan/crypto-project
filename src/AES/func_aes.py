@@ -56,18 +56,12 @@ inv_s_box = (
 )
 
 
-# mix the block by use the value`s of the sbox
-def sub_bytes(s):
+# mix the block by use the value`s of the sbox or inc_s_box due to parameter inv
+def sub_bytes(block, inv=False):
+    s_box_to_use = inv_s_box if inv else s_box
     for i in range(4):
         for j in range(4):
-            s[i][j] = s_box[s[i][j]]
-
-
-# reverse the mix to decrypt by the invert sbox
-def inv_sub_bytes(s):
-    for i in range(4):
-        for j in range(4):
-            s[i][j] = inv_s_box[s[i][j]]
+            block[i][j] = s_box_to_use[block[i][j]]
 
 
 def shift_rows(s):

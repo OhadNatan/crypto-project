@@ -35,5 +35,5 @@ class AES:
 
 
 if __name__ == '__main__':
-    aes_new = AES(('a'*16).encode('utf-8'))
-    print(aes_new.encrypt_text("ohad"*4))
+    aes_new = AES(('2b7e151628aed2a6abf7158809cf4f3c').encode('utf-8'))
+    print(aes_new.encrypt_text("30c81c46a35ce411e5fbc1191a0a52ef"))
