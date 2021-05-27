@@ -1,4 +1,4 @@
-import padding
+from src.padding import *
 import func_aes
 
 
@@ -25,13 +25,14 @@ class AES:
 
     def encrypt_text(self, plain_text):
         plain_text = plain_text.encode('utf-8')
-        plain_text = padding.pad_text(plain_text)
+        plain_text = pad_text(plain_text)
         blocks = func_aes.break_in_grids_of_16(plain_text)
 
         for i in range(len(blocks)):
             blocks[i] = self._encrypt_block(blocks[i])
 
         return blocks
+
 
 if __name__ == '__main__':
     aes_new = AES(('a'*16).encode('utf-8'))
