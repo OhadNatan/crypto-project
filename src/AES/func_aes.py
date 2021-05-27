@@ -18,9 +18,9 @@ def break_in_grids_of_16(s):
 
 # const matrix for mix columns
 matrix_to_mul = np.array([[2, 3, 1, 1],
-                   [1, 2, 3, 1],
-                   [1, 1, 2, 3],
-                   [3, 1, 1, 2]])
+                          [1, 2, 3, 1],
+                          [1, 1, 2, 3],
+                          [3, 1, 1, 2]])
 
 # normal form of s box`s
 s_box = (
