@@ -1,8 +1,3 @@
-import binascii
-import numpy as np
-
-# something that i found to break the text to block of 16
-
 
 def break_in_grids_of_16(s):
     all = []
