@@ -97,14 +97,24 @@ def set_column(matrix, column, index):
         matrix[i][index] = column[i]
 
 
+def mul_for_mix(value, mul_with_three=False):
+    s = value << 1
+    s &= 0xff
+    if (value & 128) != 0:
+        s ^= 0x1b
+    if mul_with_three:
+        s ^= value
+    return s
+
+
 def mix_column(column):
-    mixed_column = [
-        (0x02 * column[0]) ^ (0x03 * column[1]) ^ column[2] ^ column[3],
-        column[0] ^ (0x02 * column[1]) ^ (0x03 * column[2]) ^ column[3],
-        column[0] ^ column[1] ^ (0x02 * column[2]) ^ (0x03 * column[3]),
-        (0x03 * column[0]) ^ column[1] ^ column[2] ^ (0x02 * column[3])
+    r = [
+        mul_for_mix(column[0]) ^ mul_for_mix(column[1], True) ^ column[2] ^ column[3],
+        mul_for_mix(column[1]) ^ mul_for_mix(column[2], True) ^ column[3] ^ column[0],
+        mul_for_mix(column[2]) ^ mul_for_mix(column[3], True) ^ column[0] ^ column[1],
+        mul_for_mix(column[3]) ^ mul_for_mix(column[0], True) ^ column[1] ^ column[2],
     ]
-    return mixed_column
+    return r
 
 
 def mix_columns(block):
@@ -117,3 +127,21 @@ def mix_columns(block):
 def matrix_to_bytes(matrix):
     """ Converts a 4x4 matrix into a 16-byte array.  """
     return bytes(sum(matrix, []))
+
+
+def print_mat(mat):
+    for i in mat:
+        for y in i:
+            print(hex(y))
+
+
+if __name__ == '__main__':
+    block = [
+            [0x63, 0xC9, 0xFE, 0x30],
+            [0xF2, 0x63, 0x26, 0xF2],
+            [0x7D, 0xD4, 0xC9, 0xC9],
+            [0xD4, 0xFA, 0x63, 0x82],
+        ]
+    print_mat(block)
+    mix_columns(block)
+    print_mat(block)
