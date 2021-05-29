@@ -13,13 +13,11 @@ class AES:
         func_aes.add_round_key(block, self.key)
 
         for i in range(self.rounds):
-            print("block before index {} -\n{}\n".format(i, block)) #TODO: delete
             func_aes.sub_bytes(block)
             func_aes.shift_rows(block)
             if i != (self.rounds - 1):
                 func_aes.mix_columns(block)
             func_aes.add_round_key(block, self.key)
-            print("block after index {} -\n{}\n".format(i, block))  # TODO: delete
 
         return block
 
@@ -31,7 +29,16 @@ class AES:
         for i in range(len(blocks)):
             blocks[i] = self._encrypt_block(blocks[i])
 
-        return blocks
+        # Just need to recriate the data into a single stream before returning
+        int_stream = []
+
+        for grid in blocks:
+            for column in range(4):
+                for row in range(4):
+                    int_stream.append(grid[row][column])
+
+        print(int_stream)
+        return bytes(int_stream)
 
 
 if __name__ == '__main__':
