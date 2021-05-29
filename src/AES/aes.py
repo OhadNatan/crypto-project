@@ -5,7 +5,7 @@ import func_aes
 class AES:
 
     def __init__(self, key):
-        self.key = (func_aes.break_in_grids_of_16(key))[0]
+        self.key = (func_aes.break_in_grids_of_16(key.encode('utf-8')))[0]
         self.rounds = 10
 
     def _encrypt_block(self, block):
@@ -19,6 +19,18 @@ class AES:
                 func_aes.mix_columns(block)
             func_aes.add_round_key(block, self.key)
 
+        return block
+
+    def _decrypt_block(self, block):
+
+        for i in range(self.rounds):
+            func_aes.add_round_key(block, self.key)
+            if i != (self.rounds - 1):
+                func_aes.mix_columns(block)
+            func_aes.inv_shift_rows(block)
+            func_aes.sub_bytes(block, inv=True)
+
+        func_aes.add_round_key(block, self.key)
         return block
 
     def encrypt_text(self, plain_text):
@@ -42,5 +54,5 @@ class AES:
 
 
 if __name__ == '__main__':
-    aes_new = AES(('2b7e151628aed2a6abf7158809cf4f3c').encode('utf-8'))
-    print(aes_new.encrypt_text("30c81c46a35ce411e5fbc1191a0a52ef"))
+    aes_new = AES(('aaaaaaaaaaaaaaaa'))
+    print(aes_new.encrypt_text("ohadohadohadohad"))
