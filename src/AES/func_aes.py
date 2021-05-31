@@ -50,6 +50,7 @@ inv_s_box = (
     0x17, 0x2B, 0x04, 0x7E, 0xBA, 0x77, 0xD6, 0x26, 0xE1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0C, 0x7D,
 )
 
+rcon = (0x8d, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36)
 
 # mix the block by use the value`s of the sbox or inc_s_box due to parameter inv
 def sub_bytes(block, inv=False):
@@ -113,6 +114,38 @@ def mix_columns(block):
         set_column(block, column, i)
 
 
+def rot_word(word):
+    word[0], word[1], word[2], word[3] = word[1], word[2], word[3], word[0]
+
+
+def g_function_for_key_expansion(word, round_index):
+    rot_word(word)
+    word[0], word[1], word[2], word[3] = s_box[word[0]], s_box[word[1]], s_box[word[2]], s_box[word[3]]
+    for i in range(4):
+        word[i] ^= rcon[round_index]
+    return word
+
+
+def word_xor(w1, w2):
+    return [w1[0] ^ w2[0], w1[1] ^ w2[1], w1[2] ^ w2[2], w1[3] ^ w2[3]]
+
+
+def key_expansion(key):
+    total_keys_column = []
+
+    for i in range(4):
+        total_keys_column.append(get_column(key, i))
+
+    for i in range(4,44):
+        if i % 4 != 0:
+            total_keys_column.append(word_xor(total_keys_column[i-1], total_keys_column[i-4]))
+        else:
+            temp_word = g_function_for_key_expansion(total_keys_column[i-1], i//4)
+            total_keys_column.append(word_xor(temp_word, total_keys_column[i-4]))
+
+    return total_keys_column
+
+
 def matrix_to_bytes(matrix):
     """ Converts a 4x4 matrix into a 16-byte array.  """
     return bytes(sum(matrix, []))
@@ -125,12 +158,15 @@ def print_mat(mat):
 
 
 if __name__ == '__main__':
-    block = [
-            [0x63, 0xC9, 0xFE, 0x30],
-            [0xF2, 0x63, 0x26, 0xF2],
-            [0x7D, 0xD4, 0xC9, 0xC9],
-            [0xD4, 0xFA, 0x63, 0x82],
-        ]
-    print_mat(block)
-    mix_columns(block)
-    print_mat(block)
+    # block = [
+    #         [0x63, 0xC9, 0xFE, 0x30],
+    #         [0xF2, 0x63, 0x26, 0xF2],
+    #         [0x7D, 0xD4, 0xC9, 0xC9],
+    #         [0xD4, 0xFA, 0x63, 0x82],
+    #     ]
+    # print_mat(block)
+    # mix_columns(block)
+    # print_mat(block)
+    key = 'a'*16
+    key = break_in_grids_of_16(key.encode('utf-8'))[0]
+    print(key_expansion(key))

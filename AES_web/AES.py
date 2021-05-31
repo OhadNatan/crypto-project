@@ -95,7 +95,6 @@ def reverse_lookup(byte):
 
 
 def expand_key(key, rounds):
-
     rcon = [[1, 0, 0, 0]]
 
     for _ in range(1, rounds):
@@ -233,6 +232,7 @@ def enc(key, data):
             for row in range(4):
                 int_stream.append(grid[row][column])
 
+    print(''.join(map(chr,int_stream)))
     return bytes(int_stream)
 
 
