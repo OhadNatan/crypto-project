@@ -52,6 +52,7 @@ inv_s_box = (
 
 rcon = (0x8d, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36)
 
+
 # mix the block by use the value`s of the sbox or inc_s_box due to parameter inv
 def sub_bytes(block, inv=False):
     s_box_to_use = inv_s_box if inv else s_box
@@ -146,11 +147,6 @@ def key_expansion(key):
     return total_keys_column
 
 
-def matrix_to_bytes(matrix):
-    """ Converts a 4x4 matrix into a 16-byte array.  """
-    return bytes(sum(matrix, []))
-
-
 def print_mat(mat):
     for i in mat:
         for y in i:
@@ -159,15 +155,12 @@ def print_mat(mat):
 
 
 if __name__ == '__main__':
-    # block = [
-    #         [0x63, 0xC9, 0xFE, 0x30],
-    #         [0xF2, 0x63, 0x26, 0xF2],
-    #         [0x7D, 0xD4, 0xC9, 0xC9],
-    #         [0xD4, 0xFA, 0x63, 0x82],
-    #     ]
-    # print_mat(block)
-    # mix_columns(block)
-    # print_mat(block)
-    key = 'a'*16
-    key = break_in_grids_of_16(key.encode('utf-8'))[0]
-    print(key_expansion(key))
+    block = [
+            [0x63, 0xC9, 0xFE, 0x30],
+            [0xF2, 0x63, 0x26, 0xF2],
+            [0x7D, 0xD4, 0xC9, 0xC9],
+            [0xD4, 0xFA, 0x63, 0x82],
+        ]
+    print_mat(block)
+    mix_columns(block)
+    print_mat(block)

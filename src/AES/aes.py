@@ -49,6 +49,7 @@ class AES:
         for i in range(9, 0, -1):
             round_key = self.get_round_key(i)
             func_aes.add_round_key(block, round_key)
+            # Doing the mix columns three times is equal to using the reverse matrix
             for _ in range(3):
                 func_aes.mix_columns(block)
             func_aes.inv_shift_rows(block)
@@ -100,7 +101,7 @@ class AES:
 
 if __name__ == '__main__':
     aes_new = AES('a'*16)
-    x = aes_new.encrypt_text("ohad the king")
+    x = aes_new.encrypt_text("ohad")
 
     print(x)
 
