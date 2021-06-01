@@ -77,7 +77,8 @@ class AES:
                 for row in range(4):
                     int_stream.append(grid[row][column])
 
-        str_encrypt = ''.join(chr(i) for i in int_stream)
+        # str_encrypt = ''.join(chr(i) for i in int_stream)
+        # print(str_encrypt)
         return bytes(int_stream)
 
     def decrypt_text(self, plain_text):
