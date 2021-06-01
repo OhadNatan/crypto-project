@@ -5,6 +5,7 @@ from src.AES import func_aes
 class AES:
 
     def __init__(self, key):
+        assert len(key) % 16 == 0
         self.key = (func_aes.break_in_grids_of_16(key.encode('utf-8')))[0]
         self.expended_key = func_aes.key_expansion(self.key)
         self.rounds = 10
@@ -31,18 +32,6 @@ class AES:
             func_aes.add_round_key(block, self.get_round_key(i + 1))
 
         return block
-
-    # def _decrypt_block(self, block):
-    #     func_aes.add_round_key(block, self.get_round_key(10))
-    #
-    #     for i in range(self.rounds):
-    #         func_aes.inv_shift_rows(block)
-    #         func_aes.sub_bytes(block, inv=True)
-    #         func_aes.add_round_key(block, self.get_round_key(9-i))
-    #         if i != (self.rounds - 1):
-    #             func_aes.mix_columns(block)
-    #
-    #     return block
 
     def _decrypt_block(self, block):
         round_key = self.get_round_key(10)
@@ -106,8 +95,8 @@ class AES:
 
 
 if __name__ == '__main__':
-    aes_new = AES(('aaaaaaaaaaaaaaaa'))
-    x = aes_new.encrypt_text("ohadohadohadohad")
+    aes_new = AES('a'*12)
+    x = aes_new.encrypt_text("VV ve Or הומו")
 
     print(x)
 
