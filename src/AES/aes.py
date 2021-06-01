@@ -11,7 +11,11 @@ class AES:
         self.rounds = 10
 
     def get_round_key(self, round_index):
-        key = [[1,2,3,4], [1,2,3,4], [1,2,3,4], [1,2,3,4]]
+        # first init empty 4*4 matrix for the key
+        key = [[], [], [], []]
+        for i in range(4):
+            for _ in range(4):
+                key[i].append('_')
 
         start_index = 4*round_index
 
@@ -95,8 +99,8 @@ class AES:
 
 
 if __name__ == '__main__':
-    aes_new = AES('a'*12)
-    x = aes_new.encrypt_text("VV ve Or הומו")
+    aes_new = AES('a'*16)
+    x = aes_new.encrypt_text("ohad the king")
 
     print(x)
 
