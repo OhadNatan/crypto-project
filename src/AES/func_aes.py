@@ -154,7 +154,8 @@ def matrix_to_bytes(matrix):
 def print_mat(mat):
     for i in mat:
         for y in i:
-            print(hex(y))
+            print(hex(y), end=" ")
+        print('\n')
 
 
 if __name__ == '__main__':

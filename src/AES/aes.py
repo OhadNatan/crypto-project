@@ -32,15 +32,38 @@ class AES:
 
         return block
 
-    def _decrypt_block(self, block):
-        func_aes.add_round_key(block, self.get_round_key(10))
+    # def _decrypt_block(self, block):
+    #     func_aes.add_round_key(block, self.get_round_key(10))
+    #
+    #     for i in range(self.rounds):
+    #         func_aes.inv_shift_rows(block)
+    #         func_aes.sub_bytes(block, inv=True)
+    #         func_aes.add_round_key(block, self.get_round_key(9-i))
+    #         if i != (self.rounds - 1):
+    #             func_aes.mix_columns(block)
+    #
+    #     return block
 
-        for i in range(self.rounds):
+    def _decrypt_block(self, block):
+        round_key = self.get_round_key(10)
+
+        # Undo the last step we did at encrypt
+        func_aes.add_round_key(block, round_key)
+        func_aes.inv_shift_rows(block)
+        func_aes.sub_bytes(block, inv=True)
+
+        # Undo the 9 round we did at encrypt
+        for i in range(9, 0, -1):
+            round_key = self.get_round_key(i)
+            func_aes.add_round_key(block, round_key)
+            for _ in range(3):
+                func_aes.mix_columns(block)
             func_aes.inv_shift_rows(block)
             func_aes.sub_bytes(block, inv=True)
-            func_aes.add_round_key(block, self.get_round_key(9-i))
-            if i != (self.rounds - 1):
-                func_aes.mix_columns(block)
+
+        # Undo the first step we did at encrypt
+        round_key = self.get_round_key(0)
+        func_aes.add_round_key(block, round_key)
 
         return block
 
@@ -61,10 +84,10 @@ class AES:
                     int_stream.append(grid[row][column])
 
         str_encrypt = ''.join(chr(i) for i in int_stream)
-        return str_encrypt
+        return bytes(int_stream)
 
     def decrypt_text(self, plain_text):
-        blocks = func_aes.break_in_grids_of_16(plain_text.encode('utf-8'))
+        blocks = func_aes.break_in_grids_of_16(plain_text)
 
         for i in range(len(blocks)):
             blocks[i] = self._decrypt_block(blocks[i])
@@ -77,8 +100,9 @@ class AES:
                 for row in range(4):
                     int_stream.append(grid[row][column])
 
-        str_deccrypt = ''.join(chr(i) for i in int_stream)
-        return str_deccrypt
+        stream_unpad = unpadding_text(bytes(int_stream))
+
+        return stream_unpad.decode('utf-8')
 
 
 if __name__ == '__main__':
