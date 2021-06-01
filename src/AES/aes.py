@@ -1,5 +1,5 @@
 from src.padding import *
-import func_aes
+from src.AES import func_aes
 
 
 class AES:
