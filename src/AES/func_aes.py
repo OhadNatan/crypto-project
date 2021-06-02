@@ -61,10 +61,10 @@ def sub_bytes(block, inv=False):
             block[i][j] = s_box_to_use[block[i][j]]
 
 
-def shift_rows(s):
-    s[0][1], s[1][1], s[2][1], s[3][1] = s[1][1], s[2][1], s[3][1], s[0][1]
-    s[0][2], s[1][2], s[2][2], s[3][2] = s[2][2], s[3][2], s[0][2], s[1][2]
-    s[0][3], s[1][3], s[2][3], s[3][3] = s[3][3], s[0][3], s[1][3], s[2][3]
+def shift_rows(block):
+    block[1][0], block[1][1], block[1][2], block[1][3] = block[1][1], block[1][2], block[1][3], block[1][0]
+    block[2][0], block[2][1], block[2][2], block[2][3] = block[2][2], block[2][3], block[2][0], block[2][1]
+    block[3][0], block[3][1], block[3][2], block[3][3] = block[3][3], block[3][0], block[3][1], block[3][2]
 
 
 def inv_shift_rows(s):
@@ -161,6 +161,9 @@ if __name__ == '__main__':
             [0x7D, 0xD4, 0xC9, 0xC9],
             [0xD4, 0xFA, 0x63, 0x82],
         ]
-    print_mat(block)
-    mix_columns(block)
+    # print_mat(block)
+    # mix_columns(block)
+    block[1][0], block[1][1], block[1][2], block[1][3] = block[1][1], block[1][2], block[1][3], block[1][0]
+    block[2][0], block[2][1], block[2][2], block[2][3] = block[2][2], block[2][3], block[2][0], block[2][1]
+    block[3][0], block[3][1], block[3][2], block[3][3] = block[3][3], block[3][0], block[3][1], block[3][2]
     print_mat(block)

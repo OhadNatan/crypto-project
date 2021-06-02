@@ -1,6 +1,6 @@
 from src.padding import *
 from src.AES import func_aes
-
+from AES_web import AES as aes_web
 
 class AES:
 
@@ -101,11 +101,14 @@ class AES:
 
 
 if __name__ == '__main__':
+    import base64
     aes_new = AES('a'*16)
-    x = aes_new.encrypt_text("ohad")
+    x = aes_new.encrypt_text("ohad"*4)
 
     print(x)
-
+    base64_bytes = base64.b64encode(x)
+    base64_message = base64_bytes.decode('ascii')
+    print(base64_message)
     y = aes_new.decrypt_text(x)
 
     print(y)
