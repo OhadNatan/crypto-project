@@ -123,6 +123,7 @@ def expand_key(key, rounds):
 
     return key_grid
 
+
 def rotate_row_left(row, n=1):
     return row[n:] + row[:n]
 
