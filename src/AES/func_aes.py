@@ -67,10 +67,10 @@ def shift_rows(block):
     block[3][0], block[3][1], block[3][2], block[3][3] = block[3][3], block[3][0], block[3][1], block[3][2]
 
 
-def inv_shift_rows(s):
-    s[0][1], s[1][1], s[2][1], s[3][1] = s[3][1], s[0][1], s[1][1], s[2][1]
-    s[0][2], s[1][2], s[2][2], s[3][2] = s[2][2], s[3][2], s[0][2], s[1][2]
-    s[0][3], s[1][3], s[2][3], s[3][3] = s[1][3], s[2][3], s[3][3], s[0][3]
+def inv_shift_rows(block):
+    block[1][0], block[1][1], block[1][2], block[1][3] = block[1][3], block[1][0], block[1][1], block[1][2]
+    block[2][0], block[2][1], block[2][2], block[2][3] = block[2][2], block[2][3], block[2][0], block[2][1]
+    block[3][0], block[3][1], block[3][2], block[3][3] = block[3][1], block[3][2], block[3][3], block[3][0]
 
 
 def add_round_key(block, key):
@@ -157,7 +157,7 @@ def print_mat(mat):
 if __name__ == '__main__':
     block = [
             [0x63, 0xC9, 0xFE, 0x30],
-            [0xF2, 0x63, 0x26, 0xF2],
+            [0xF1, 0x63, 0x26, 0xF2],
             [0x7D, 0xD4, 0xC9, 0xC9],
             [0xD4, 0xFA, 0x63, 0x82],
         ]
@@ -167,3 +167,9 @@ if __name__ == '__main__':
     block[2][0], block[2][1], block[2][2], block[2][3] = block[2][2], block[2][3], block[2][0], block[2][1]
     block[3][0], block[3][1], block[3][2], block[3][3] = block[3][3], block[3][0], block[3][1], block[3][2]
     print_mat(block)
+    print('-------------')
+    block[1][0], block[1][1], block[1][2], block[1][3] = block[1][3], block[1][0], block[1][1], block[1][2]
+    block[2][0], block[2][1], block[2][2], block[2][3] = block[2][2], block[2][3], block[2][0], block[2][1]
+    block[3][0], block[3][1], block[3][2], block[3][3] = block[3][1], block[3][2], block[3][3], block[3][0]
+    print_mat(block)
+
