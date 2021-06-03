@@ -81,7 +81,7 @@ def vF(hexmsg, paddingnum, s):
     return hF(bytes.fromhex(hexmsg), paddingnum) == (s * s) % nrabin
 
 if __name__ == '__main__':
-    choice = 'S'
+    choice = 'V'
 
     if choice == "V":
         to_ver = '00112233445566778899aabbccddeeff'
