@@ -233,7 +233,6 @@ def enc(key, data):
             for row in range(4):
                 int_stream.append(grid[row][column])
 
-    print(''.join(map(chr,int_stream)))
     return bytes(int_stream)
 
 
