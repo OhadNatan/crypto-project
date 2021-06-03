@@ -299,11 +299,13 @@ def extract_key_for_round(expanded_key, round):
   return [row[round*4: round*4 + 4] for row in expanded_key]
 
 if __name__ == '__main__':
-    import base64
-    en = enc('aaaaaaaaaaaaaaaa'.encode('utf-8'), 'ohadohadohadohad'.encode('utf-8'))
-    print(en)
-    base64_bytes = base64.b64encode(en)
-    base64_message = base64_bytes.decode('ascii')
-    print(base64_message)
-    de = dec('aaaaaaaaaaaaaaaa'.encode('utf-8'), en)
-    print(de)
+    # import base64
+    # en = enc('aaaaaaaaaaaaaaaa'.encode('utf-8'), 'ohadohadohadohad'.encode('utf-8'))
+    # print(en)
+    # base64_bytes = base64.b64encode(en)
+    # base64_message = base64_bytes.decode('ascii')
+    # print(base64_message)
+    # de = dec('aaaaaaaaaaaaaaaa'.encode('utf-8'), en)
+    # print(de)
+    val = 0x55
+    print(lookup(val))

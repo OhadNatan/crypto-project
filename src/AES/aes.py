@@ -7,22 +7,11 @@ class AES:
     def __init__(self, key):
         assert len(key) % 16 == 0
         self.key = (func_aes.break_in_grids_of_16(key.encode('utf-8')))[0]
-        self.expended_key = func_aes.key_expansion(self.key)
+        self.expended_key = func_aes.expand_key(key.encode('utf-8'), 11)
         self.rounds = 10
 
-    def get_round_key(self, round_index):
-        # first init empty 4*4 matrix for the key
-        key = [[], [], [], []]
-        for i in range(4):
-            for _ in range(4):
-                key[i].append('_')
-
-        start_index = 4*round_index
-
-        for i in range(start_index, start_index + 4):
-            func_aes.set_column(key, self.expended_key[i], i - start_index)
-
-        return key
+    def get_round_key(self, round):
+        return [row[round*4: round*4 + 4] for row in self.expended_key]
 
     def _encrypt_block(self, block):
 
