@@ -131,12 +131,7 @@ def word_xor(w1, w2):
 
 # Ohad and Sagi
 def key_expansion(key):
-    rcon = [[1, 0, 0, 0]]
-
-    for _ in range(1, 11):
-        rcon.append([rcon[-1][0] * 2, 0, 0, 0])
-        if rcon[-1][0] > 0x80:
-            rcon[-1][0] ^= 0x11b
+    rcon = (0x8d, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36)
 
     total_keys_column = []
 
@@ -155,6 +150,7 @@ def key_expansion(key):
 
 # Web
 def expand_key(key, rounds):
+
     rcon = [[1, 0, 0, 0]]
 
     for _ in range(1, rounds):
@@ -166,10 +162,10 @@ def expand_key(key, rounds):
 
     for round in range(rounds):
         last_column = [row[-1] for row in key_grid]
-        last_column_rcon_step = g_function_for_key_expansion(last_column, round, rcon)
+        last_column_after_g = g_function_for_key_expansion(last_column, round, rcon)
 
         for r in range(4):
-            key_grid[r] += bytes([last_column_rcon_step[r]
+            key_grid[r] += bytes([last_column_after_g[r]
                                   ^ key_grid[r][round*4]])
 
         # Three more columns to go

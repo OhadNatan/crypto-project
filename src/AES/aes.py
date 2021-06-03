@@ -7,8 +7,9 @@ class AES:
     def __init__(self, key):
         assert len(key) % 16 == 0
         self.key = (func_aes.break_in_grids_of_16(key.encode('utf-8')))[0]
-        self.expended_key = func_aes.expand_key(key.encode('utf-8'), 11)
         self.rounds = 10
+        self.expended_key = func_aes.expand_key(key.encode('utf-8'), self.rounds + 1)
+
 
     def get_round_key(self, round):
         return [row[round*4: round*4 + 4] for row in self.expended_key]
