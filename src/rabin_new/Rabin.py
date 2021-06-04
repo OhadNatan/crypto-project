@@ -32,10 +32,10 @@ def decryption(a, p, q, m):
     elif q % 8 == 5:
         s = prime.sqrt_p_5_mod_8(a, q)
 
-    gcd, c, d = prime.egcd(p, q)
-    x = (r * d * q + s * c * p) % n
-    y = (r * d * q - s * c * p) % n
-    lst = [x, n - x, y, n - y]
+    _, x, y = prime.egcd(p, q)
+    m1 = (r * y * q + s * x * p) % n
+    m2 = (r * y * q - s * x * p) % n
+    lst = [m1, n - m1, m2, n - m2]
 
     return verify(lst, m)
 
@@ -50,13 +50,12 @@ def verify(lst, m):
 
     return False
 
-# decide which answer to choose
-def choose(lst):
 
-    for i in lst:
-        binary = bin(i)
-        append = binary[-16:]   # take the last 16 bits
-        binary = binary[:-16]   # remove the last 16 bits
-        if append == binary[-16:]:
-            return i
-    return
+def generate_keys_for_rabin():
+    num_of_bit = 128
+    p = prime.generate_a_prime_number(num_of_bit)
+    q = prime.generate_a_prime_number(num_of_bit)
+    while q == p:
+        q = prime.generate_a_prime_number(num_of_bit)
+
+    return q, p, q*p

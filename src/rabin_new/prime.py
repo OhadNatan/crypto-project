@@ -45,7 +45,7 @@ def generate_a_prime_number(num_of_bits):
     while 1:
         # randomly generate a 128-bit number
         num = random.getrandbits(num_of_bits)
-        if isPrime(num):
+        if (num % 4 == 3) and isPrime(num):
             return num
         else:
             continue
@@ -91,4 +91,6 @@ def none_in_x_is_n(x, n):
     return True
 
 if __name__ == "__main__":
-    print(generate_a_prime_number(128))
+    x = generate_a_prime_number(128)
+    print(x)
+    print(x % 4 == 3)
