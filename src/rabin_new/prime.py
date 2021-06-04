@@ -89,3 +89,6 @@ def none_in_x_is_n(x, n):
         if i == n:
             return False
     return True
+
+if __name__ == "__main__":
+    print(generate_a_prime_number(128))

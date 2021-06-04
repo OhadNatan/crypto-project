@@ -17,7 +17,7 @@ def padding(plaintext):
 
 
 # encryption function
-def decryption(a, p, q):
+def decryption(a, p, q, m):
     n = p * q
     r, s = 0, 0
     # find sqrt
@@ -37,13 +37,18 @@ def decryption(a, p, q):
     y = (r * d * q - s * c * p) % n
     lst = [x, n - x, y, n - y]
 
-    plaintext = choose(lst)
-    string = bin(plaintext)
-    string = string[:-16]
-    plaintext = int(string, 2)
+    return verify(lst, m)
 
-    return plaintext
 
+def verify(lst, m):
+    for m_i in lst:
+        string = bin(m_i)
+        string = string[:-16]
+        plaintext = int(string, 2)
+        if plaintext == m:
+            return True
+
+    return False
 
 # decide which answer to choose
 def choose(lst):
