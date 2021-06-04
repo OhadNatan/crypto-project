@@ -52,10 +52,12 @@ def verify(lst, m):
 
 
 def generate_keys_for_rabin():
-    num_of_bit = 128
-    p = prime.generate_a_prime_number(num_of_bit)
-    q = prime.generate_a_prime_number(num_of_bit)
+    p = prime.generate_a_prime_number()
+    q = prime.generate_a_prime_number()
     while q == p:
-        q = prime.generate_a_prime_number(num_of_bit)
+        q = prime.generate_a_prime_number()
 
-    return q, p, q*p
+    return p, q, q*p
+
+if __name__ == "__main__":
+    print(generate_keys_for_rabin())

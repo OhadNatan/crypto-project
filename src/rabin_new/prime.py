@@ -40,7 +40,7 @@ def isPrime(n):
 
 
 # generate a 128-bit prime number
-def generate_a_prime_number(num_of_bits):
+def generate_a_prime_number(num_of_bits=128):
     # keep creating a random 16-byte (128-bit) number until there is a prime number
     while 1:
         # randomly generate a 128-bit number
