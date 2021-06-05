@@ -1,10 +1,11 @@
 # Rabin.py
-import prime
+from src.rabin_new import prime
 
 # encryption function
 # plaintext is a 224-bit number
 def encryption(plaintext, n):
     # c = m^2 mod n
+    plaintext = int(plaintext, 16)
     plaintext = padding(plaintext)
     return plaintext ** 2 % n
 
@@ -18,6 +19,7 @@ def padding(plaintext):
 
 # encryption function
 def decryption(a, p, q, m):
+    m = int(m, 16)
     n = p * q
     r, s = 0, 0
     # find sqrt

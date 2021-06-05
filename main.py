@@ -1,16 +1,54 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+from src.AES import aes
+from src.rabin_new import Rabin
+from src import ecdh_key
+import hashlib
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+def set_ecdh():
+    a, b, p, xGen, yGen = 2, 2, 17, 5, 1
+    curve = ecdh_key.EllipticCurve(a, b, p, xGen, yGen)
+    curve.numOfPoints()
+    return curve
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+def main():
+    # Rabin's Key generation for Bob and Alice
+    p_bob, q_bob, n_bob = Rabin.generate_keys_for_rabin()
+    p_alice, q_alice, n_alice = Rabin.generate_keys_for_rabin()
+
+    # Generate shared public key between Bob and Alice
+    curve = set_ecdh()
+    alpha_alice = curve.generatePrivateKey()
+    beta_bob = curve.generatePrivateKey()
+
+    alice_pub = ecdh_key.generatePublicKey(alpha_alice, curve)
+    bob_pub = ecdh_key.generatePublicKey(beta_bob, curve)
+
+    alice_shared = ecdh_key.generateSharedKey(bob_pub, alpha_alice, curve)
+    alice_shared = str(alice_shared)
+    alice_shared = hashlib.md5(alice_shared.encode('utf-8')).hexdigest()
+    bob_shared = ecdh_key.generateSharedKey(alice_pub, beta_bob, curve)
+    bob_shared = str(bob_shared)
+    bob_shared = hashlib.md5(bob_shared.encode('utf-8')).hexdigest()
+
+
+
+    # AES object for each client
+    bob_aes = aes.AES(str(bob_shared))
+    alice_aes = aes.AES(str(alice_shared))
+
+
+    # **********   Bob  **********
+    Bob_msg = 'crypto is fun, group 8 gets score is: 100'
+    bob_msg_hashed = hashlib.sha224(Bob_msg.encode('utf-8')).hexdigest()
+    sig_bob = Rabin.encryption(bob_msg_hashed, n_alice)
+    msg_encrypted = bob_aes.encrypt_text(Bob_msg)
+
+
+    # **********   Alice  **********
+    msg_decrypted = alice_aes.decrypt_text(msg_encrypted)
+    print(msg_decrypted)
+    alice_msg_hashed = hashlib.sha224(msg_decrypted.encode('utf-8')).hexdigest()
+    res = Rabin.decryption(sig_bob, p_alice, q_alice, alice_msg_hashed)
+    print(res)
+
+main()
