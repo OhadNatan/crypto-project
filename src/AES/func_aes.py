@@ -50,7 +50,7 @@ inv_s_box = (
     0x17, 0x2B, 0x04, 0x7E, 0xBA, 0x77, 0xD6, 0x26, 0xE1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0C, 0x7D,
 )
 
-rcon = (0x8d, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36)
+# rcon = (0x8d, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36)
 
 
 # mix the block by use the value`s of the sbox or inc_s_box due to parameter inv
@@ -119,19 +119,20 @@ def rot_word(word):
     word[0], word[1], word[2], word[3] = word[1], word[2], word[3], word[0]
 
 
-def g_function_for_key_expansion(word, round_index):
+def g_function_for_key_expansion(word, round, rcon):
     rot_word(word)
-    word[0], word[1], word[2], word[3] = s_box[word[0]], s_box[word[1]], s_box[word[2]], s_box[word[3]]
-    for i in range(4):
-        word[i] ^= rcon[round_index]
-    return word
+    word = [s_box[b] for b in word]
+    return [word[i] ^ rcon[round][i] for i in range(len(word))]
 
 
 def word_xor(w1, w2):
     return [w1[0] ^ w2[0], w1[1] ^ w2[1], w1[2] ^ w2[2], w1[3] ^ w2[3]]
 
 
+# Ohad and Sagi
 def key_expansion(key):
+    rcon = (0x8d, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36)
+
     total_keys_column = []
 
     for i in range(4):
@@ -141,10 +142,39 @@ def key_expansion(key):
         if i % 4 != 0:
             total_keys_column.append(word_xor(total_keys_column[i-1], total_keys_column[i-4]))
         else:
-            temp_word = g_function_for_key_expansion(total_keys_column[i-1], i//4)
+            temp_word = g_function_for_key_expansion(total_keys_column[i-1], i//4, rcon)
             total_keys_column.append(word_xor(temp_word, total_keys_column[i-4]))
 
     return total_keys_column
+
+
+# Web
+def expand_key(key, rounds):
+
+    rcon = [[1, 0, 0, 0]]
+
+    for _ in range(1, rounds):
+        rcon.append([rcon[-1][0]*2, 0, 0, 0])
+        if rcon[-1][0] > 0x80:
+            rcon[-1][0] ^= 0x11b
+
+    key_grid = break_in_grids_of_16(key)[0]
+
+    for round in range(rounds):
+        last_column = [row[-1] for row in key_grid]
+        last_column_after_g = g_function_for_key_expansion(last_column, round, rcon)
+
+        for r in range(4):
+            key_grid[r] += bytes([last_column_after_g[r]
+                                  ^ key_grid[r][round*4]])
+
+        # Three more columns to go
+        for i in range(len(key_grid)):
+            for j in range(1, 4):
+                key_grid[i] += bytes([key_grid[i][round*4+j]
+                                      ^ key_grid[i][round*4+j+3]])
+
+    return key_grid
 
 
 def print_mat(mat):
@@ -155,21 +185,22 @@ def print_mat(mat):
 
 
 if __name__ == '__main__':
-    block = [
-            [0x63, 0xC9, 0xFE, 0x30],
-            [0xF1, 0x63, 0x26, 0xF2],
-            [0x7D, 0xD4, 0xC9, 0xC9],
-            [0xD4, 0xFA, 0x63, 0x82],
-        ]
+    # block = [
+    #         [0x63, 0xC9, 0xFE, 0x30],
+    #         [0xF1, 0x63, 0x26, 0xF2],
+    #         [0x7D, 0xD4, 0xC9, 0xC9],
+    #         [0xD4, 0xFA, 0x63, 0x82],
+    #     ]
+    # # print_mat(block)
+    # # mix_columns(block)
+    # block[1][0], block[1][1], block[1][2], block[1][3] = block[1][1], block[1][2], block[1][3], block[1][0]
+    # block[2][0], block[2][1], block[2][2], block[2][3] = block[2][2], block[2][3], block[2][0], block[2][1]
+    # block[3][0], block[3][1], block[3][2], block[3][3] = block[3][3], block[3][0], block[3][1], block[3][2]
     # print_mat(block)
-    # mix_columns(block)
-    block[1][0], block[1][1], block[1][2], block[1][3] = block[1][1], block[1][2], block[1][3], block[1][0]
-    block[2][0], block[2][1], block[2][2], block[2][3] = block[2][2], block[2][3], block[2][0], block[2][1]
-    block[3][0], block[3][1], block[3][2], block[3][3] = block[3][3], block[3][0], block[3][1], block[3][2]
-    print_mat(block)
-    print('-------------')
-    block[1][0], block[1][1], block[1][2], block[1][3] = block[1][3], block[1][0], block[1][1], block[1][2]
-    block[2][0], block[2][1], block[2][2], block[2][3] = block[2][2], block[2][3], block[2][0], block[2][1]
-    block[3][0], block[3][1], block[3][2], block[3][3] = block[3][1], block[3][2], block[3][3], block[3][0]
-    print_mat(block)
+    # print('-------------')
+    # block[1][0], block[1][1], block[1][2], block[1][3] = block[1][3], block[1][0], block[1][1], block[1][2]
+    # block[2][0], block[2][1], block[2][2], block[2][3] = block[2][2], block[2][3], block[2][0], block[2][1]
+    # block[3][0], block[3][1], block[3][2], block[3][3] = block[3][1], block[3][2], block[3][3], block[3][0]
+    # print_mat(block)
+    print(s_box[0x55])
 
