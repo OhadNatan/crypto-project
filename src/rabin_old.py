@@ -53,7 +53,6 @@ def root(m, p, q):
             break
         m = m + bytes.fromhex("00")
         i = i + 1
-    print("paddingnum: " + str(i))
     return sig, i
 
 
@@ -87,24 +86,6 @@ def sing_msg(msg, p, q):
 
 
 def verify(to_ver, sig, padding_num, nrabin):
-    print("result of verification: " + str(vF(to_ver, int(padding_num), int(sig, 16), nrabin)))
-
-
-def main(choice=None, msg=None, p=None, q=None, n=None, padding_num=None, sig=None):
-
-    if choice == "V" and msg and sig and padding_num:
-        verify(msg, sig, padding_num, n)
-
-    if choice == "S" and p and q and msg:
-        return sing_msg(msg, p, q)
-
-    if choice == "G":
-        return generate_keys_for_rabin()
-
-
-# msg_to_sig = '00112233445566778899aabbccddeeff'
-# p, q, n = main('G')
-#
-# sig, pad_num = main('S', msg=msg_to_sig, p=p, q=q)
-#
-# main('V', sig=sig, msg=msg_to_sig, padding_num=pad_num, n=n)
+    res = vF(to_ver, int(padding_num), int(sig, 16), nrabin)
+    print("Result of Rabin signatures verification: " + str(res))
+    return res
