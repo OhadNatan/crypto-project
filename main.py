@@ -38,7 +38,7 @@ def main():
 
 
     # **********   Bob  **********
-    Bob_msg = 'crypto is fun, group 8 gets score is: 100'
+    Bob_msg = 'crypto is fun, group 8 score is 100'
     msg_encrypted = bob_aes.encrypt_text(Bob_msg)
     bob_msg_hashed = hashlib.sha224(msg_encrypted).hexdigest()
     sig_bob, pad_num = Rabin.sing_msg(bob_msg_hashed, p_bob, q_bob)
@@ -46,8 +46,9 @@ def main():
 
     # **********   Alice  **********
     msg_decrypted = alice_aes.decrypt_text(msg_encrypted)
+    print("The msg is:\n{}".format(msg_decrypted))
     alice_msg_hashed = hashlib.sha224(msg_encrypted).hexdigest()
-    res = Rabin.verify(alice_msg_hashed, sig_bob, pad_num, n_bob)
+    Rabin.verify(alice_msg_hashed, sig_bob, pad_num, n_bob)
 
 
 main()
