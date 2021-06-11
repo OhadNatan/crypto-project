@@ -1,5 +1,5 @@
 from src.AES import aes
-from src import rabin_old as Rabin
+from src import rabin as Rabin
 from src import ecdh_key
 import hashlib
 
