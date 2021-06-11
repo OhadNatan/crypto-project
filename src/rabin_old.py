@@ -102,9 +102,9 @@ def main(choice=None, msg=None, p=None, q=None, n=None, padding_num=None, sig=No
         return generate_keys_for_rabin()
 
 
-msg_to_sig = '00112233445566778899aabbccddeeff'
-p, q, n = main('G')
-
-sig, pad_num = main('S', msg=msg_to_sig, p=p, q=q)
-
-main('V', sig=sig, msg=msg_to_sig, padding_num=pad_num, n=n)
+# msg_to_sig = '00112233445566778899aabbccddeeff'
+# p, q, n = main('G')
+#
+# sig, pad_num = main('S', msg=msg_to_sig, p=p, q=q)
+#
+# main('V', sig=sig, msg=msg_to_sig, padding_num=pad_num, n=n)

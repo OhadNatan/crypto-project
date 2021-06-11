@@ -1,5 +1,5 @@
 from src.AES import aes
-from src.rabin_new import Rabin
+from src import rabin_old as Rabin
 from src import ecdh_key
 import hashlib
 
@@ -39,16 +39,15 @@ def main():
 
     # **********   Bob  **********
     Bob_msg = 'crypto is fun, group 8 gets score is: 100'
-    bob_msg_hashed = hashlib.sha224(Bob_msg.encode('utf-8')).hexdigest()
-    sig_bob = Rabin.encryption(bob_msg_hashed, n_alice)
     msg_encrypted = bob_aes.encrypt_text(Bob_msg)
+    bob_msg_hashed = hashlib.sha224(msg_encrypted).hexdigest()
+    sig_bob, pad_num = Rabin.sing_msg(bob_msg_hashed, p_bob, q_bob)
 
 
     # **********   Alice  **********
     msg_decrypted = alice_aes.decrypt_text(msg_encrypted)
-    print(msg_decrypted)
-    alice_msg_hashed = hashlib.sha224(msg_decrypted.encode('utf-8')).hexdigest()
-    res = Rabin.decryption(sig_bob, p_alice, q_alice, alice_msg_hashed)
-    print(res)
+    alice_msg_hashed = hashlib.sha224(msg_encrypted).hexdigest()
+    res = Rabin.verify(alice_msg_hashed, sig_bob, pad_num, n_bob)
+
 
 main()
