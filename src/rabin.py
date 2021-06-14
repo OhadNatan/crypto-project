@@ -1,14 +1,8 @@
 import hashlib, sys
 import random
+import math
 
-
-def gcd(a, b):
-    if b > a:
-        a, b = b, a
-    while b > 0:
-        a, b = b, a % b
-    return a
-
+# primary number generator
 
 def nextPrime(p):
     while p % 4 != 3:
@@ -18,7 +12,7 @@ def nextPrime(p):
 
 def nextPrime_3(p):
     m_ = 3 * 5 * 7 * 11 * 13 * 17 * 19 * 23 * 29
-    while gcd(p, m_) != 1:
+    while math.gcd(p, m_) != 1:
         p = p + 4
     if (pow(2, p - 1, p) != 1):
         return nextPrime_3(p + 4)
@@ -31,6 +25,7 @@ def nextPrime_3(p):
     return p
 
 
+# A collision-resistant hash function
 # x: bytes
 # return: int
 def h(x):
@@ -56,23 +51,24 @@ def root(m, p, q):
     return sig, i
 
 
-def writeNumber(number, fnam):
-    with open(fnam + '.txt', 'w') as f:
-        f.write('%d' % number)
-
-
+# Calculate h(mU) % n
+# n: public key of the sender
 def hF(m, paddingnum, nrabin):
     return h(m + bytes.fromhex("00") * paddingnum) % nrabin
 
 
+# get message and private key and return signature and padding num (generated)
+# Calculate signature by padding and return the signature and the generated padding num
 def sF(hexmsg, p, q):
     return root(bytes.fromhex(hexmsg), p, q)
 
 
+# Verify signature of encrypted message with the sender public key -return true if H(m,U,n) == s*s % n  , else false
 def vF(hexmsg, paddingnum, s, nrabin):
     return hF(bytes.fromhex(hexmsg), paddingnum, nrabin) == (s * s) % nrabin
 
 
+# Generate 2 large prime number that both of them equals 3 mod 4. return also the mul between those two number
 def generate_keys_for_rabin():
     arg = '{}{}'.format((random.randint(a=0, b=9)), random.randint(a=0, b=9))
     p = nextPrime(h(bytes.fromhex(arg)) % (2 ** 501 + 1))
@@ -80,11 +76,13 @@ def generate_keys_for_rabin():
     return p, q, p * q
 
 
+# get message and private key and return signature and padding num (generated)
 def sing_msg(msg, p, q):
     sig, padding_num = sF(msg, p, q)
     return hex(sig), padding_num
 
 
+# Verify signature of encrypted message with the sender public key
 def verify(to_ver, sig, padding_num, nrabin):
     res = vF(to_ver, int(padding_num), int(sig, 16), nrabin)
     print("Result of Rabin signatures verification: " + str(res))
