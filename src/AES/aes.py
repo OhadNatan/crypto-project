@@ -10,10 +10,11 @@ class AES:
         self.rounds = 10
         self.expended_key = func_aes.expand_key(key.encode('utf-8'), self.rounds + 1)
 
-
+    # A function that returns the corresponding key by the rotation number
     def get_round_key(self, round):
         return [row[round*4: round*4 + 4] for row in self.expended_key]
 
+    # A function that activates the encryption on a specific block that it receives
     def _encrypt_block(self, block):
 
         func_aes.add_round_key(block, self.get_round_key(0))
@@ -27,6 +28,7 @@ class AES:
 
         return block
 
+    # A function that decrypt a specific block that it receives
     def _decrypt_block(self, block):
         round_key = self.get_round_key(10)
 
@@ -51,6 +53,7 @@ class AES:
 
         return block
 
+    # A function that gets a string and starts encrypting by a block size of 128Bit
     def encrypt_text(self, plain_text):
         plain_text = plain_text.encode('utf-8')
         plain_text = pad_text(plain_text)
@@ -71,6 +74,7 @@ class AES:
         # print(str_encrypt)
         return bytes(int_stream)
 
+    # A function that receives an encrypted string and decrypts the encryption
     def decrypt_text(self, plain_text):
         blocks = func_aes.break_in_grids_of_16(plain_text)
 
