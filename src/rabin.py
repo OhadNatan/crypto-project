@@ -46,6 +46,8 @@ def root(m, p, q):
         sig = (pow(q, p - 2, p) * q * pow(x, (p + 1) // 4, p) + sig) % (nrabin)
         if (sig * sig) % nrabin == x and i != 0:
             break
+
+        # padding
         m = m + bytes.fromhex("00")
         i = i + 1
     return sig, i
