@@ -4,6 +4,7 @@ from src import ecdh_key
 import hashlib
 import base64
 
+
 def set_ecdh():
     a, b, p, xGen, yGen = 2, 2, 17, 5, 1
     curve = ecdh_key.EllipticCurve(a, b, p, xGen, yGen)
