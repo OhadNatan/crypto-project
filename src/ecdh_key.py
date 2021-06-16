@@ -62,7 +62,8 @@ class EllipticCurve():
         self.__E = count
     def generatePrivateKey(self):
         # Generates the private key
-        return random.randint(2, self.__E)
+        limit = self.__E - 1 if self.__E > 1 else self.__E
+        return random.randint(2, limit)
 
 def generatePublicKey(privKey, curve):
     # Generates a public key from the given private key
@@ -76,6 +77,7 @@ def generatePublicKey(privKey, curve):
         y = y1
         count += 1
     return (x,y)
+
 
 def generateSharedKey(pubKey, privKey, curve):
     # Generates the shared key for two users

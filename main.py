@@ -2,7 +2,7 @@ from src.AES import aes
 from src import rabin as Rabin
 from src import ecdh_key
 import hashlib
-
+import base64
 
 def set_ecdh():
     a, b, p, xGen, yGen = 2, 2, 17, 5, 1
@@ -44,13 +44,20 @@ def main():
     sig_bob, pad_num = Rabin.sing_msg(bob_msg_hashed, p_bob, q_bob)
     msg_encrypted = bob_aes.encrypt_text(bob_msg)
 
+    # What Bob send
+    print("The message before encryption:\n{msg}".format(msg=bob_msg))
+    base64_bytes = base64.b64encode(x)
+    base64_message = base64_bytes.decode('ascii')
+    print(base64_message)
+    print("The encrypted message is (in base64):\n".format())
+
 
     # **********   Alice  **********
     msg_decrypted = alice_aes.decrypt_text(msg_encrypted)
     alice_msg_hashed = hashlib.sha224(msg_decrypted.encode('utf-8')).hexdigest()
-    if Rabin.verify(alice_msg_hashed, sig_bob, pad_num, n_bob) is False:
-        print("*******************False*********************")
-    # print("The message is: {}".format(msg_decrypted))
+    assert Rabin.verify(alice_msg_hashed, sig_bob, pad_num, n_bob) is True
+    print("The message that received is: {}".format(msg_decrypted))
 
 
-main()
+while True:
+    main()
