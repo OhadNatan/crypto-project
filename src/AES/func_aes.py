@@ -129,25 +129,6 @@ def word_xor(w1, w2):
     return [w1[0] ^ w2[0], w1[1] ^ w2[1], w1[2] ^ w2[2], w1[3] ^ w2[3]]
 
 
-# Ohad and Sagi
-def key_expansion(key):
-    rcon = (0x8d, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36)
-
-    total_keys_column = []
-
-    for i in range(4):
-        total_keys_column.append(get_column(key, i))
-
-    for i in range(4,44):
-        if i % 4 != 0:
-            total_keys_column.append(word_xor(total_keys_column[i-1], total_keys_column[i-4]))
-        else:
-            temp_word = g_function_for_key_expansion(total_keys_column[i-1], i//4, rcon)
-            total_keys_column.append(word_xor(temp_word, total_keys_column[i-4]))
-
-    return total_keys_column
-
-
 # Web
 def expand_key(key, rounds):
 
@@ -175,32 +156,3 @@ def expand_key(key, rounds):
                                       ^ key_grid[i][round*4+j+3]])
 
     return key_grid
-
-
-def print_mat(mat):
-    for i in mat:
-        for y in i:
-            print(hex(y), end=" ")
-        print('\n')
-
-
-if __name__ == '__main__':
-    # block = [
-    #         [0x63, 0xC9, 0xFE, 0x30],
-    #         [0xF1, 0x63, 0x26, 0xF2],
-    #         [0x7D, 0xD4, 0xC9, 0xC9],
-    #         [0xD4, 0xFA, 0x63, 0x82],
-    #     ]
-    # # print_mat(block)
-    # # mix_columns(block)
-    # block[1][0], block[1][1], block[1][2], block[1][3] = block[1][1], block[1][2], block[1][3], block[1][0]
-    # block[2][0], block[2][1], block[2][2], block[2][3] = block[2][2], block[2][3], block[2][0], block[2][1]
-    # block[3][0], block[3][1], block[3][2], block[3][3] = block[3][3], block[3][0], block[3][1], block[3][2]
-    # print_mat(block)
-    # print('-------------')
-    # block[1][0], block[1][1], block[1][2], block[1][3] = block[1][3], block[1][0], block[1][1], block[1][2]
-    # block[2][0], block[2][1], block[2][2], block[2][3] = block[2][2], block[2][3], block[2][0], block[2][1]
-    # block[3][0], block[3][1], block[3][2], block[3][3] = block[3][1], block[3][2], block[3][3], block[3][0]
-    # print_mat(block)
-    print(s_box[0x55])
-

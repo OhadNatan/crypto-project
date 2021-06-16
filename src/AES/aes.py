@@ -1,6 +1,6 @@
 from src.padding import *
 from src.AES import func_aes
-from AES_web import AES as aes_web
+
 
 class AES:
 
