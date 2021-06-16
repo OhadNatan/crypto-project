@@ -45,19 +45,18 @@ def main():
     msg_encrypted = bob_aes.encrypt_text(bob_msg)
 
     # What Bob send
-    print("The message before encryption:\n{msg}".format(msg=bob_msg))
-    base64_bytes = base64.b64encode(x)
+    print("The message before encryption:\n{msg}\n".format(msg=bob_msg))
+    base64_bytes = base64.b64encode(msg_encrypted)
     base64_message = base64_bytes.decode('ascii')
-    print(base64_message)
-    print("The encrypted message is (in base64):\n".format())
+    print("The encrypted message is (in base64):\n{msg}".format(msg=base64_message))
+    print("The signature is:\n{sig}\nThe padding is: {pad}\n".format(sig=sig_bob, pad=pad_num))
 
 
     # **********   Alice  **********
     msg_decrypted = alice_aes.decrypt_text(msg_encrypted)
     alice_msg_hashed = hashlib.sha224(msg_decrypted.encode('utf-8')).hexdigest()
     assert Rabin.verify(alice_msg_hashed, sig_bob, pad_num, n_bob) is True
-    print("The message that received is: {}".format(msg_decrypted))
+    print("The message that received is (after decryption):\n{}".format(msg_decrypted))
 
 
-while True:
-    main()
+main()
