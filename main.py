@@ -40,7 +40,7 @@ def main():
 
 
     # **********   Bob  **********
-    bob_msg = 'Hello world'
+    bob_msg = 'Hello world, group 8 wll get 100'
     bob_msg_hashed = hashlib.sha224(bob_msg.encode('utf-8')).hexdigest()
     sig_bob, pad_num = Rabin.sing_msg(bob_msg_hashed, p_bob, q_bob)
     msg_encrypted = bob_aes.encrypt_text(bob_msg)
