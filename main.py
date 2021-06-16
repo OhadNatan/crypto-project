@@ -10,6 +10,7 @@ def set_ecdh():
     curve.numOfPoints()
     return curve
 
+
 def main():
     # Rabin's Key generation for Bob and Alice
     p_bob, q_bob, n_bob = Rabin.generate_keys_for_rabin()
@@ -38,17 +39,18 @@ def main():
 
 
     # **********   Bob  **********
-    Bob_msg = 'crypto is fun, group 8 score is 100'
-    msg_encrypted = bob_aes.encrypt_text(Bob_msg)
-    bob_msg_hashed = hashlib.sha224(msg_encrypted).hexdigest()
+    bob_msg = 'Hello world'
+    bob_msg_hashed = hashlib.sha224(bob_msg.encode('utf-8')).hexdigest()
     sig_bob, pad_num = Rabin.sing_msg(bob_msg_hashed, p_bob, q_bob)
+    msg_encrypted = bob_aes.encrypt_text(bob_msg)
 
 
     # **********   Alice  **********
     msg_decrypted = alice_aes.decrypt_text(msg_encrypted)
-    print("The msg is:\n{}".format(msg_decrypted))
-    alice_msg_hashed = hashlib.sha224(msg_encrypted).hexdigest()
-    Rabin.verify(alice_msg_hashed, sig_bob, pad_num, n_bob)
+    alice_msg_hashed = hashlib.sha224(msg_decrypted.encode('utf-8')).hexdigest()
+    if Rabin.verify(alice_msg_hashed, sig_bob, pad_num, n_bob) is False:
+        print("*******************False*********************")
+    # print("The message is: {}".format(msg_decrypted))
 
 
 main()
