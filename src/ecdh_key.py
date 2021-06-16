@@ -62,8 +62,7 @@ class EllipticCurve():
         self.__E = count
     def generatePrivateKey(self):
         # Generates the private key
-        limit = self.__E - 1 if self.__E > 1 else self.__E
-        return random.randint(2, limit)
+        return random.randint(1, self.__E - 1)
 
 def generatePublicKey(privKey, curve):
     # Generates a public key from the given private key

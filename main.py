@@ -59,4 +59,5 @@ def main():
     print("The message that received is (after decryption):\n{}".format(msg_decrypted))
 
 
-main()
+while True:
+    main()
